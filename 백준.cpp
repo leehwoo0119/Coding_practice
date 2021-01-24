@@ -1,49 +1,68 @@
-#include <iostream>
-#define _CRT_SECURE_NO_WARNINGS
-using namespace std;
+#include<stdio.h>
+#include<stdlib.h>
+void DrawStar(char** draw, int n, int x, int y)
+{
+    // 높이 3일때 
+    if (n == 3)
+    {
 
-
-
-void draw1(int t, int i, int a, int ss) {
-
-    for (t = 0; t < i; t++) {
-        printf(" ");
+        *(*(draw + x) + y) = '*';
+        *(*(draw + x + 1) + y - 1) = '*';
+        *(*(draw + x + 1) + y + 1) = '*';
+        *(*(draw + x + 2) + y - 2) = '*';
+        *(*(draw + x + 2) + y - 1) = '*';
+        *(*(draw + x + 2) + y) = '*';
+        *(*(draw + x + 2) + y + 1) = '*';
+        *(*(draw + x + 2) + y + 2) = '*';
     }
-    printf("*");
-    for (t = 0; t < a - 2; t++) {
-        printf(" ");
+    else
+    {
+        DrawStar(draw, (n / 2), x, y);
+        DrawStar(draw, (n / 2), x + (n / 2), y - (n / 2));
+        DrawStar(draw, (n / 2), x + (n / 2), y + (n / 2));
     }
-    printf("*");
-    for (t = ss; t > 0; t--) {
-        printf(" ");
-    }
-    if (i != a - 1)printf("*");
-    for (t = 0; t < a - 2; t++) {
-        printf(" ");
-    }
-    printf("*");
-    printf("\n");
 }
+int main()
+{
+    char** draw = 0;
+    int N;
+    scanf("%d", &N);
 
-void draw2(int a, int ss) {
-    for (int i = 1; i <= a; i++)printf("*");
-    for (int i = 1; i <= ss; i++)printf(" ");
-    for (int i = 1; i <= a; i++)printf("*");
-}
-int main() {
-    int t = 0;
-    int a;
-    int point = 0;
-    int arr[1000000] = { 0, };
-    scanf("%d", &a);
-    for (int i = 2; i < a; i++) {
-        point = 1 + 2 * (i - 2);
-        arr[i - 2] = point;
+    if (draw == NULL)
+    {
+        draw = (char**)malloc(N * sizeof(char*));
+
+        for (int i = 0; i < N; i++)
+        {
+            draw[i] = (char*)malloc(2 * N * sizeof(char));
+        }
     }
-    //for(int i=1;i<=a*2-1;i++)draw2(i,a);
-    draw2(a, 1 + 2 * (a - 2));
-    printf("\n");
-    for (int i = 1; i < a; i++)draw1(t, i, a, 2 * (a - 1 - i) - 1);
-    for (int i = a - 2; i > 0; i--)draw1(t, i, a, 2 * (a - 1 - i) - 1);
-    draw2(a, 1 + 2 * (a - 2));
+
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N * 2; j++)
+        {
+            draw[i][j] = ' ';
+        }
+    }
+    DrawStar(draw, N, 0, N - 1); // 높이,x꼭대기,y꼭대기
+
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N * 2; j++)
+        {
+            printf("%c", draw[i][j]);
+        }
+        printf("\n");
+    }
+
+    if (draw != NULL)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            free(draw[i]);
+        }
+        free(draw);
+    }
+    return 0;
 }
