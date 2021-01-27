@@ -7,7 +7,7 @@ using namespace std;
 struct Logic {
 private:
 	int** dat = 0;
-	int turn = 0;
+	int turn = 1;
 	int save = 0;
 	int save_front[2] = { 0, };
 	int save_behind[2] = { 0, };
@@ -22,7 +22,10 @@ public:
 
 	void GetPos(char*, int);
 
-	void Check(int, int);
+	void CheckHorizantal(int);
+	void CheckVertical(int);
+	void CheckRightDown(int, int);
+	void CheckRightUp(int, int);
 };
 
 struct Render {
@@ -47,8 +50,8 @@ void Logic::MakeMemory()
 			memset(dat[i], 0, sizeof(int) * SIZE);
 		}
 		//ÃÊ±â ¹ÙµÏ¾Ë
-		dat[3][3] = 1, dat[4][4] = 1;
-		dat[3][4] = 2, dat[4][3] = 2;
+		dat[3][3] = 2, dat[4][4] = 2;
+		dat[3][4] = 1, dat[4][3] = 1;
 	}
 }
 void Logic::DeleteMemory()
@@ -65,15 +68,15 @@ void Logic::DeleteMemory()
 
 int Logic::TurnCal(int t)
 {
-	if (turn == 0)
-	{
-		turn = 1;
-		return 0;
-	}
 	if (turn == 1)
 	{
-		turn = 0;
+		turn = 2;
 		return 1;
+	}
+	if (turn == 2)
+	{
+		turn = 1;
+		return 2;
 	}
 }
 
@@ -89,59 +92,127 @@ void Logic::GetPos(char* c, int t)
 
 	if (dat[s1 - '0'][s2 - '0'] == 0)
 	{
-		if (t == 0)
+		if (t == 1)
 			dat[s1 - '0'][s2 - '0'] = 1;
-		else if (t == 1)
+		else if (t == 2)
 			dat[s1 - '0'][s2 - '0'] = 2;
 	}
 	else
 	{
-		if (t == 0)turn = 1;
-		if (t == 1)turn = 0;
+		if (t == 1)turn = 2;
+		if (t == 2)turn = 1;
 	}
 }
 
-void Logic::Check(int i, int j)
+void Logic::CheckHorizantal(int i)
 {
-	if (j == SIZE) return;
-
-	
-	if (dat[i][j] == dat[save_front[0]][save_front[1]]&& dat[i][j]!=0&&i== save_front[0])
+	int save[8] = { 0, };
+	int save_Front = 0;
+	int save_Behind = 0;
+	for (int j = 0; j < SIZE; j++)
 	{
-		save_behind[0] = i; save_behind[1] = j;
-		cout << save_front[0] << ' ' << save_front[1] << endl;
-		cout << save_behind[0] << ' ' << save_behind[1] << endl;
-
-		cout << save<<endl;
-		for (int i = save_front[1]; i <= save_behind[1]; i++)dat[save_front[0]][i] = save;
-	}
-	if (dat[i][j] == 1)
-	{
-		if (dat[i][j] == dat[i][j + 1]) { /*cout << i << ' ' << j << endl;*/ return;}
-		else if (dat[i][j + 1] == 0) {/* cout << i << ' ' << j << endl;*/ return; }
-		else
+		if (dat[i][j] != 0 && (dat[i][j] != dat[i][j + 1]) && (dat[i][j + 1] != 0))
 		{
-			save = 2;
-			save_front[0] = i; save_front[1] = j;			
-			Check(i, j+1);
-		}
+			save_Front = j;
+			break;
+		}			
+		if (j == SIZE - 1)return;
 	}
-	if (dat[i][j] == 2)
+	for (int k = 0; k < SIZE - save_Front; k++)
 	{
-		if (dat[i][j] == dat[i][j + 1]) { /*cout << i << ' ' << j << endl;*/ return;
-		}
-		else if (dat[i][j + 1] == 0) {/* cout << i << ' ' << j << endl;*/ return;
-		}
-		else
-		{
-			save = 1;
-			save_front[0] = i; save_front[1] = j;
-			Check(i, j + 1);
-		}
+		save[k] = dat[i][save_Front + k];
 	}
-	
-	Check(i, j+1);
-	
+	for (int t = 0; t < SIZE - save_Front; t++)
+	{
+		if (save[t] == save[0] && t != 0)
+			save_Behind = t + save_Front;
+	}
+	//cout << save[0] << ' ' << turn << endl;
+	if (save[0] == 0 || save[0] != turn)return;
+	for (int q = save_Front; q <= save_Behind; q++)
+	{
+		dat[i][q] = save[0];
+	}
+}
+void Logic::CheckVertical(int i)
+{
+	int save[8] = { 0, };
+	int save_Front = 0;
+	int save_Behind = 0;
+	for (int j = 0; j < SIZE; j++)
+	{
+		if (dat[j][i] != 0 && (dat[j][i] != dat[j+1][i]) && (dat[j + 1][i] != 0))
+		{
+			save_Front = j;
+			break;
+		}
+		if (i == SIZE - 1)return;
+	}
+	for (int k = 0; k < SIZE - save_Front; k++)
+	{
+		save[k] = dat[save_Front + k][i];
+	}
+	for (int t = 0; t < SIZE - save_Front; t++)
+	{
+		if (save[t] == save[0] && t != 0)
+			save_Behind = t + save_Front;		
+	}
+	if (save[0] == 0 || save[0] != turn)return;
+	for (int q = save_Front; q <= save_Behind; q++)
+	{
+		dat[q][i] = save[0];
+	}
+}
+
+void Logic::CheckRightDown(int y, int x)
+{
+	while (1)
+	{
+		y--; x--;
+		if (y == 0 || x == 0)
+		{
+			break;
+		}		
+	}
+	int ii = 0;
+	int jj = 0;
+	int save[8] = { 0, };
+	int save_Front[2] = { 0, };
+	int save_Behind[2] = { 0, };
+
+	if (y == 0) jj = x; 
+	else ii = y; 
+	for (; ii < SIZE; jj++,ii++)
+	{
+		cout << ii << ' ' << jj << endl;
+		if (dat[ii][jj] != 0 && (dat[ii][jj] != dat[ii + 1][jj + 1]) && (dat[ii + 1][jj + 1] != 0))
+		{
+			
+			save_Front[0] = ii; save_Front[1] = jj;
+			break;
+		}
+		if (jj == SIZE - 1)return;
+	}
+	for (int k = 0; k < SIZE - save_Front[1]; k++)
+	{
+		save[k] = dat[save_Front[0] + k][save_Front[1] + k];
+	}
+	for (int t = 0; t < SIZE - save_Front[1]; t++)
+	{
+		if (save[t] == save[0] && t != 0)
+		{
+			save_Behind[0] = t + save_Front[0];
+			save_Behind[1] = t + save_Front[1];
+		}
+			
+	}
+	//cout << save_Front[0] << ' ' << save_Front[1] << ' '<< save_Behind[0] << save_Behind[1] << endl;
+	//cout << save[0] << ' ' << turn << endl;
+	if (save[0] == 0 || save[0] != turn)return;
+	for (int q = save_Front[0], p = save_Front[1]; p <= save_Front[1]; q++, p++)
+	{
+		dat[q][p] = save[0];
+	}
 }
 void Render::GetDat(int** p)
 {
@@ -211,8 +282,8 @@ void Render::DrawBoard()
 }
 int main()
 {
-	int i = 0;
-	int j = 0;
+	//int i = 0;
+	//int k = 0;
 
 	Logic logic;
 	Render render;
@@ -230,8 +301,10 @@ int main()
 		cout << "Input Position: ";
 		cin >> pos;
 		logic.GetPos(pos, logic.TurnGetter());
-		for(int i=0;i<SIZE;i++)
-		logic.Check(i,j);
+		
+		logic.CheckHorizantal(pos[0]-'0');
+		logic.CheckVertical(pos[1]-'0');
+		logic.CheckRightDown(pos[0] - '0', pos[1] - '0');
 	}
 	logic.DeleteMemory();
 }
