@@ -12,7 +12,6 @@ private:
 	int save_front[2] = { 0, };
 	int save_behind[2] = { 0, };
 public:
-	
 	void MakeMemory(); //메모리 할당
 	void DeleteMemory(); //매모리 해제
 
@@ -21,11 +20,16 @@ public:
 	int TurnCal(int);	
 
 	void GetPos(char*, int);
+	//←→ 방향체크
+	void CheckHorizantal(int, int, int, int, int);
+	//↑↓ 방향체크
+	void CheckVertical(int, int, int, int, int);
+	//↘↖ 방향 체크
+	void CheckRightDown(int, int, int, int, int);
+	//↗↙ 방향체크
+	void CheckRightUp(int, int, int, int, int);
 
-	void CheckHorizantal(int);
-	void CheckVertical(int);
-	void CheckRightDown(int, int);
-	void CheckRightUp(int, int);
+	int WinCheck(int);
 };
 
 struct Render {
@@ -99,120 +103,217 @@ void Logic::GetPos(char* c, int t)
 	}
 	else
 	{
-		if (t == 1)turn = 2;
-		if (t == 2)turn = 1;
+		if (t == 1)
+		{
+			cout << "입력 위치가 잘못되었습니다." << endl;
+			turn = 2;
+		}
+		if (t == 2)
+		{
+			cout << "입력 위치가 잘못되었습니다." << endl;
+			turn = 1;
+		}
 	}
 }
 
-void Logic::CheckHorizantal(int i)
+void Logic::CheckHorizantal(int y, int x, int turn, int cnt, int dir)
 {
-	int save[8] = { 0, };
-	int save_Front = 0;
-	int save_Behind = 0;
-	for (int j = 0; j < SIZE; j++)
+	//→ = (dir=1), ← = (dir=2)
+	if (dir == 0)
 	{
-		if (dat[i][j] != 0 && (dat[i][j] != dat[i][j + 1]) && (dat[i][j + 1] != 0))
-		{
-			save_Front = j;
-			break;
-		}			
-		if (j == SIZE - 1)return;
+		if (x == 0)
+			dir = 1;
+		else if (dat[y][x - 1] == 0)
+			dir = 1;
+		else if (x == SIZE - 1)
+			dir = 2;
+		else if (dat[y][x + 1] == 0)
+			dir = 2;
 	}
-	for (int k = 0; k < SIZE - save_Front; k++)
-	{
-		save[k] = dat[i][save_Front + k];
-	}
-	for (int t = 0; t < SIZE - save_Front; t++)
-	{
-		if (save[t] == save[0] && t != 0)
-			save_Behind = t + save_Front;
-	}
-	//cout << save[0] << ' ' << turn << endl;
-	if (save[0] == 0 || save[0] != turn)return;
-	for (int q = save_Front; q <= save_Behind; q++)
-	{
-		dat[i][q] = save[0];
-	}
-}
-void Logic::CheckVertical(int i)
-{
-	int save[8] = { 0, };
-	int save_Front = 0;
-	int save_Behind = 0;
-	for (int j = 0; j < SIZE; j++)
-	{
-		if (dat[j][i] != 0 && (dat[j][i] != dat[j+1][i]) && (dat[j + 1][i] != 0))
-		{
-			save_Front = j;
-			break;
-		}
-		if (i == SIZE - 1)return;
-	}
-	for (int k = 0; k < SIZE - save_Front; k++)
-	{
-		save[k] = dat[save_Front + k][i];
-	}
-	for (int t = 0; t < SIZE - save_Front; t++)
-	{
-		if (save[t] == save[0] && t != 0)
-			save_Behind = t + save_Front;		
-	}
-	if (save[0] == 0 || save[0] != turn)return;
-	for (int q = save_Front; q <= save_Behind; q++)
-	{
-		dat[q][i] = save[0];
-	}
-}
+	if (dir == 1)
+		if (x == SIZE)return;
+	if (dir == 2)
+		if (x == -1)return;
 
-void Logic::CheckRightDown(int y, int x)
-{
-	while (1)
-	{
-		y--; x--;
-		if (y == 0 || x == 0)
-		{
-			break;
-		}		
-	}
-	int ii = 0;
-	int jj = 0;
-	int save[8] = { 0, };
-	int save_Front[2] = { 0, };
-	int save_Behind[2] = { 0, };
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
 
-	if (y == 0) jj = x; 
-	else ii = y; 
-	for (; ii < SIZE; jj++,ii++)
+	if (dat[y][x] == turn && cnt != 0)
 	{
-		cout << ii << ' ' << jj << endl;
-		if (dat[ii][jj] != 0 && (dat[ii][jj] != dat[ii + 1][jj + 1]) && (dat[ii + 1][jj + 1] != 0))
+		if (dir == 1)
 		{
-			
-			save_Front[0] = ii; save_Front[1] = jj;
-			break;
+			for (int i = 0; i <= cnt; i++)
+				dat[y][x - i] = turn;
 		}
-		if (jj == SIZE - 1)return;
-	}
-	for (int k = 0; k < SIZE - save_Front[1]; k++)
-	{
-		save[k] = dat[save_Front[0] + k][save_Front[1] + k];
-	}
-	for (int t = 0; t < SIZE - save_Front[1]; t++)
-	{
-		if (save[t] == save[0] && t != 0)
+		if (dir == 2)
 		{
-			save_Behind[0] = t + save_Front[0];
-			save_Behind[1] = t + save_Front[1];
+			for (int i = 0; i <= cnt; i++)
+				dat[y][x + i] = turn;
 		}
-			
+
 	}
-	//cout << save_Front[0] << ' ' << save_Front[1] << ' '<< save_Behind[0] << save_Behind[1] << endl;
-	//cout << save[0] << ' ' << turn << endl;
-	if (save[0] == 0 || save[0] != turn)return;
-	for (int q = save_Front[0], p = save_Front[1]; p <= save_Front[1]; q++, p++)
+	if (dir == 1)
+		CheckHorizantal(y, x + 1, turn, cnt, dir);
+	if (dir == 2)
+		CheckHorizantal(y, x - 1, turn, cnt, dir);
+}
+void Logic::CheckVertical(int y, int x, int turn, int cnt, int dir)
+{
+	//↑ = (dir=1), ↓ = (dir=2)
+	if (dir == 0)
 	{
-		dat[q][p] = save[0];
+		if (y == SIZE - 1)
+			dir = 1;
+		else if (dat[y + 1][x] == 0)
+			dir = 1;
+		else if (y == 0)
+			dir = 2;
+		else if (dat[y - 1][x] == 0)
+			dir = 2;
 	}
+	if (dir == 1)
+		if (y == -1)return;
+	if (dir == 2)
+		if (y == SIZE)return;
+
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
+
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y + i][x] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y - i][x] = turn;
+		}
+
+	}
+	if (dir == 1)
+		CheckVertical(y - 1, x, turn, cnt, dir);
+	if (dir == 2)
+		CheckVertical(y + 1, x, turn, cnt, dir);
+}
+void Logic::CheckRightDown(int y, int x, int turn, int cnt,int dir)
+{
+	//↘ = (dir=1), ↖ = (dir=2)
+	if (dir == 0)
+	{
+		if(x == 0 || y == 0)
+			dir = 1;
+		else if (dat[y - 1][x - 1] == 0)
+			dir = 1;
+		else if(x == SIZE - 1 || y == SIZE - 1)
+			dir = 2;
+		else if (dat[y + 1][x + 1] == 0 )
+			dir = 2;
+	}
+	if (dir == 1)
+		if (y == SIZE || x == SIZE)return;
+	if (dir == 2)
+		if (y == -1 || x == -1)return;
+		
+	//if (dat[y][x] == 0) return;
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
+	
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y - i][x - i] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y + i][x + i] = turn;
+		}
+
+	}
+	if (dir == 1)
+		CheckRightDown(y + 1, x + 1, turn, cnt, dir);
+	if (dir == 2)
+		CheckRightDown(y - 1, x - 1, turn, cnt, dir);
+}
+void Logic::CheckRightUp(int y, int x, int turn, int cnt, int dir)
+{
+	//↙ = (dir=1), ↗ = (dir=2)
+	if (dir == 0)
+	{
+		if (x == SIZE - 1 || y == 0)
+			dir = 1;
+		else if (dat[y - 1][x + 1] == 0)
+			dir = 1;
+		else if (x == 0 || y == SIZE - 1)
+			dir = 2;
+		else if (dat[y + 1][x - 1] == 0)
+			dir = 2;
+	}
+	if (dir == 1)
+		if (y == SIZE || x == -1)return;
+	if (dir == 2)
+		if (y == -1 || x == SIZE)return;
+		
+	
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
+
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y - i][x + i] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y + i][x - i] = turn;
+		}
+		
+	}
+	if (dir == 1)
+		CheckRightUp(y + 1, x - 1, turn, cnt, dir);
+	if (dir == 2)
+		CheckRightUp(y - 1, x + 1, turn, cnt, dir);
+}
+int Logic::WinCheck(int type)
+{
+	int whitePoint = 0; int blackPoint = 0;
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			if (dat[i][j] == 1)blackPoint++;
+			else if (dat[i][j] == 2)whitePoint++;
+		}
+	}
+	if (type == 0)
+	{
+		if (blackPoint == 0)
+		{
+			cout << "백돌승" << endl;
+			return 1;
+		}
+		else if (whitePoint == 0)
+		{
+			cout << "흑돌승" << endl;
+			return 1;
+		}
+	}
+	if (type == 1)
+	{
+		if (blackPoint > whitePoint)cout << "흑돌승" << endl;
+		else if (blackPoint < whitePoint)cout << "백돌승" << endl;
+		else cout << "무승부" << endl;
+		return 1;
+	}
+	return 0;
 }
 void Render::GetDat(int** p)
 {
@@ -282,11 +383,10 @@ void Render::DrawBoard()
 }
 int main()
 {
-	//int i = 0;
-	//int k = 0;
-
 	Logic logic;
 	Render render;
+	int isWin = 0;
+	int cnt = 3;
 	char pos[3] = { 0, };
 	logic.MakeMemory();
 
@@ -294,17 +394,22 @@ int main()
 
 	while (1)
 	{
+		cnt++;
+		cout << cnt << endl;
 		//system("cls");
 		render.DrawBoard();
 		logic.TurnCal(logic.TurnGetter());
-		//cout << logic.TurnGetter()<<endl;
 		cout << "Input Position: ";
 		cin >> pos;
 		logic.GetPos(pos, logic.TurnGetter());
 		
-		logic.CheckHorizantal(pos[0]-'0');
-		logic.CheckVertical(pos[1]-'0');
-		logic.CheckRightDown(pos[0] - '0', pos[1] - '0');
+		logic.CheckHorizantal(pos[0] - '0', pos[1]-'0', logic.TurnGetter(), 0, 0);
+		logic.CheckVertical(pos[0] - '0', pos[1] - '0', logic.TurnGetter(), 0, 0);
+		logic.CheckRightDown(pos[0] - '0', pos[1] - '0', logic.TurnGetter(), 0, 0);
+		logic.CheckRightUp(pos[0] - '0', pos[1] - '0', logic.TurnGetter(), 0, 0);
+		isWin = logic.WinCheck(0);		
+		if(cnt==64)logic.WinCheck(1);
+		if (isWin == 1)break;
 	}
 	logic.DeleteMemory();
 }
