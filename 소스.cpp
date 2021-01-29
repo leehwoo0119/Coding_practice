@@ -12,14 +12,17 @@ private:
 	int save_front[2] = { 0, };
 	int save_behind[2] = { 0, };
 public:
-	void MakeMemory(); //메모리 할당
-	void DeleteMemory(); //매모리 해제
+	bool isStone = false;
+	void MakeMemory();						//메모리 할당
+	void DeleteMemory();					//매모리 해제
 
-	int** DatGetter() { return dat; };//dat 반환
-	int TurnGetter() { return turn; };
-	int TurnCal(int);	
+	int** DatGetter() { return dat; };		//dat 반환
+	int TurnGetter() { return turn; };		//turn 반환
+	int TurnCal(int);						//turn 계산
 
-	void GetPos(char*, int);
+	void GetPos(char*, int);				//위치값에따른 dat값 계산
+
+	void TurnReturn(char* , int);
 	//←→ 방향체크
 	void CheckHorizantal(int, int, int, int, int);
 	//↑↓ 방향체크
@@ -29,7 +32,9 @@ public:
 	//↗↙ 방향체크
 	void CheckRightUp(int, int, int, int, int);
 
-	int WinCheck(int);
+	bool CanStone(char*, int);
+
+	int WinCheck(int);						//승리체크
 };
 
 struct Render {
@@ -37,9 +42,9 @@ private:
 	int** dat = 0;
 public:
 	
-	void GetDat(int**); //Logic의 dat 받아오기
+	void GetDat(int**);						//Logic의 dat 받아오기
 
-	void DrawBoard(); //보드 그리기
+	void DrawBoard();						//보드 그리기
 };
 
 void Logic::MakeMemory()
@@ -86,36 +91,35 @@ int Logic::TurnCal(int t)
 
 void Logic::GetPos(char* c, int t)
 {
-	char s1 = 0, s2 = 0;
-	
 
-	for (int i = 0; i < 2; i++)
-	{
-		s1 = c[0]; s2 = c[1];
-	}
-
-	if (dat[s1 - '0'][s2 - '0'] == 0)
+	if (dat[c[0] - '0'][c[1] - '0'] == 0)
 	{
 		if (t == 1)
-			dat[s1 - '0'][s2 - '0'] = 1;
+			dat[c[0] - '0'][c[1] - '0'] = 1;
 		else if (t == 2)
-			dat[s1 - '0'][s2 - '0'] = 2;
+			dat[c[0] - '0'][c[1] - '0'] = 2;
 	}
 	else
 	{
-		if (t == 1)
-		{
-			cout << "입력 위치가 잘못되었습니다." << endl;
-			turn = 2;
-		}
-		if (t == 2)
-		{
-			cout << "입력 위치가 잘못되었습니다." << endl;
-			turn = 1;
-		}
+		TurnReturn(c, t);
 	}
 }
+void Logic::TurnReturn(char* c, int t)
+{
 
+	if (t == 1)
+	{
+		//cout << "입력 위치가 잘못되었습니다." << endl;
+		turn = 2;
+	}
+	if (t == 2)
+	{
+		//cout << "입력 위치가 잘못되었습니다." << endl;
+		turn = 1;
+	}
+	if (!isStone)dat[c[0] - '0'][c[1] - '0'] = 0;
+
+}
 void Logic::CheckHorizantal(int y, int x, int turn, int cnt, int dir)
 {
 	//→ = (dir=1), ← = (dir=2)
@@ -134,12 +138,13 @@ void Logic::CheckHorizantal(int y, int x, int turn, int cnt, int dir)
 		if (x == SIZE)return;
 	if (dir == 2)
 		if (x == -1)return;
-
+	if (dat[y][x] == 0) return;
 	if (dat[y][x] != turn && dat[y][x] != 0)
 		cnt++;
-
+	
 	if (dat[y][x] == turn && cnt != 0)
 	{
+		//cout << "check1" << endl;
 		if (dir == 1)
 		{
 			for (int i = 0; i <= cnt; i++)
@@ -150,8 +155,9 @@ void Logic::CheckHorizantal(int y, int x, int turn, int cnt, int dir)
 			for (int i = 0; i <= cnt; i++)
 				dat[y][x + i] = turn;
 		}
-
+		isStone = true;
 	}
+
 	if (dir == 1)
 		CheckHorizantal(y, x + 1, turn, cnt, dir);
 	if (dir == 2)
@@ -172,15 +178,16 @@ void Logic::CheckVertical(int y, int x, int turn, int cnt, int dir)
 			dir = 2;
 	}
 	if (dir == 1)
-		if (y == -1)return;
+		if (y == -1)return ;
 	if (dir == 2)
-		if (y == SIZE)return;
-
+		if (y == SIZE)return ;
+	if (dat[y][x] == 0) return;
 	if (dat[y][x] != turn && dat[y][x] != 0)
 		cnt++;
 
 	if (dat[y][x] == turn && cnt != 0)
 	{
+		//cout << "check2" << endl;
 		if (dir == 1)
 		{
 			for (int i = 0; i <= cnt; i++)
@@ -191,7 +198,7 @@ void Logic::CheckVertical(int y, int x, int turn, int cnt, int dir)
 			for (int i = 0; i <= cnt; i++)
 				dat[y - i][x] = turn;
 		}
-
+		isStone = true;
 	}
 	if (dir == 1)
 		CheckVertical(y - 1, x, turn, cnt, dir);
@@ -217,12 +224,13 @@ void Logic::CheckRightDown(int y, int x, int turn, int cnt,int dir)
 	if (dir == 2)
 		if (y == -1 || x == -1)return;
 		
-	//if (dat[y][x] == 0) return;
+	if (dat[y][x] == 0) return;
 	if (dat[y][x] != turn && dat[y][x] != 0)
 		cnt++;
 	
 	if (dat[y][x] == turn && cnt != 0)
 	{
+		//cout << "check3" << endl;
 		if (dir == 1)
 		{
 			for (int i = 0; i <= cnt; i++)
@@ -233,7 +241,7 @@ void Logic::CheckRightDown(int y, int x, int turn, int cnt,int dir)
 			for (int i = 0; i <= cnt; i++)
 				dat[y + i][x + i] = turn;
 		}
-
+		isStone = true;
 	}
 	if (dir == 1)
 		CheckRightDown(y + 1, x + 1, turn, cnt, dir);
@@ -259,12 +267,13 @@ void Logic::CheckRightUp(int y, int x, int turn, int cnt, int dir)
 	if (dir == 2)
 		if (y == -1 || x == SIZE)return;
 		
-	
+	if (dat[y][x] == 0) return;
 	if (dat[y][x] != turn && dat[y][x] != 0)
 		cnt++;
 
 	if (dat[y][x] == turn && cnt != 0)
 	{
+		//cout << "check4" << endl;
 		if (dir == 1)
 		{
 			for (int i = 0; i <= cnt; i++)
@@ -275,12 +284,20 @@ void Logic::CheckRightUp(int y, int x, int turn, int cnt, int dir)
 			for (int i = 0; i <= cnt; i++)
 				dat[y + i][x - i] = turn;
 		}
-		
+		isStone = true;
 	}
 	if (dir == 1)
 		CheckRightUp(y + 1, x - 1, turn, cnt, dir);
 	if (dir == 2)
 		CheckRightUp(y - 1, x + 1, turn, cnt, dir);
+}
+bool Logic::CanStone(char* pos, int t)
+{	
+	bool res = false;
+	
+	if (isStone)res = true;
+	if (!res)TurnReturn(pos, t);
+	return res;
 }
 int Logic::WinCheck(int type)
 {
@@ -394,6 +411,7 @@ int main()
 
 	while (1)
 	{
+		logic.isStone = false;
 		cnt++;
 		cout << cnt << endl;
 		//system("cls");
@@ -403,10 +421,12 @@ int main()
 		cin >> pos;
 		logic.GetPos(pos, logic.TurnGetter());
 		
+		
 		logic.CheckHorizantal(pos[0] - '0', pos[1]-'0', logic.TurnGetter(), 0, 0);
 		logic.CheckVertical(pos[0] - '0', pos[1] - '0', logic.TurnGetter(), 0, 0);
 		logic.CheckRightDown(pos[0] - '0', pos[1] - '0', logic.TurnGetter(), 0, 0);
 		logic.CheckRightUp(pos[0] - '0', pos[1] - '0', logic.TurnGetter(), 0, 0);
+		logic.CanStone(pos, logic.TurnGetter());
 		isWin = logic.WinCheck(0);		
 		if(cnt==64)logic.WinCheck(1);
 		if (isWin == 1)break;
