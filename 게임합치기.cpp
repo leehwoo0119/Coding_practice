@@ -15,7 +15,8 @@ struct Logic {
 private:
 	int** dat = 0;
 	int size = 0;
-	int turn = 1;
+	int turn = 2;
+	bool isStone = false;
 public:
 	
 	void MakeMemory(const int);				//메모리 할당
@@ -25,8 +26,16 @@ public:
 	int SizeGetter() { return size; };
 	int SelectGameType();
 	bool CheckCanStone(char*);
+	void AlphaPosition(char*);
 
-	//int TurnGetter() { return turn; };		//turn 반환
+	//←→ 방향체크
+	void CheckHorizantal(int, int, int, int, int);
+	//↑↓ 방향체크
+	void CheckVertical(int, int, int, int, int);
+	//↘↖ 방향 체크
+	void CheckRightDown(int, int, int, int, int);
+	//↗↙ 방향체크
+	void CheckRightUp(int, int, int, int, int);
 
 };
 
@@ -36,9 +45,9 @@ private:
 	int size = 0;
 	string line[20] = {
 		"─","│ ",
-		"┌"," ┬"," ┐",
-		"├"," ┼"," ┤",
-		"└"," ┴"," ┘",
+		"┌ ","┬ ","┐",
+		"├ ","┼ ","┤",
+		"└ ","┴ ","┘",
 		"┌─","─┬─","─┐",
 		"├─","─┼─","─┤",
 		"└─","─┴─","─┘",
@@ -69,7 +78,7 @@ void Logic::MakeMemory(const int type)
 			//초기 바둑알
 			dat[3][3] = 2, dat[4][4] = 2;
 			dat[3][4] = 1, dat[4][3] = 1;
-		}		
+		}	
 	}
 }
 void Logic::DeleteMemory(int type)
@@ -95,18 +104,207 @@ int Logic::SelectGameType()
 }
 bool Logic::CheckCanStone(char* pos)
 {
-	char s1 = pos[0] - '0'; char s2 = pos[1] - '0'; // y  x
-
+	AlphaPosition(pos);
+	char s1 = pos[0]; char s2 = pos[1]; // y  x
+	isStone = false;
 	if (dat[s1][s2] != 0) return false;
-
-	dat[s1][s2] = turn + 1;
-
-	turn = 1 - turn;
-
+	dat[s1][s2] = turn;
+	cout << dat[s1][s2] << " " << turn << endl;
+	CheckHorizantal(s1, s2, turn, 0, 0);
+	CheckVertical(s1, s2, turn, 0, 0);
+	CheckRightDown(s1, s2, turn, 0, 0);
+	CheckRightUp(s1, s2, turn, 0, 0);
+	if (!isStone)
+	{
+		dat[s1][s2] = 0;
+		return false;
+	}
+	
+	if (turn == 1)turn = 2;
+	else if (turn == 2)turn = 1;
 	return false;
 }
+void Logic::AlphaPosition(char* pos)
+{
+	for (int i = 0; i < 2; i++)
+	{
+		if (pos[i] >= '0' && pos[i] <= '9')
+			pos[i] -= '0';
+		else if (pos[i] >= 'a' && pos[i] <= 'f')
+			pos[i] = pos[i] - 'a' + 10;
+	}
+}
+void Logic::CheckHorizantal(int y, int x, int turn, int cnt, int dir)
+{
+	//→ = (dir=1), ← = (dir=2)
+	if (dir == 0)
+	{
+		if (x == 0)
+			dir = 1;
+		else if (dat[y][x - 1] == 0)
+			dir = 1;
+		else if (x == size - 1)
+			dir = 2;
+		else if (dat[y][x + 1] == 0)
+			dir = 2;
+	}
+	if (dir == 1)
+		if (x == size)return;
+	if (dir == 2)
+		if (x == -1)return;
+	if (dat[y][x] == 0) return;
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
 
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		cout << "check1" << endl;
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y][x - i] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y][x + i] = turn;
+		}
+		isStone = true;
+	}
 
+	if (dir == 1)
+		CheckHorizantal(y, x + 1, turn, cnt, dir);
+	if (dir == 2)
+		CheckHorizantal(y, x - 1, turn, cnt, dir);
+}
+void Logic::CheckVertical(int y, int x, int turn, int cnt, int dir)
+{
+	//↑ = (dir=1), ↓ = (dir=2)
+	if (dir == 0)
+	{
+		if (y == size - 1)
+			dir = 1;
+		else if (dat[y + 1][x] == 0)
+			dir = 1;
+		else if (y == 0)
+			dir = 2;
+		else if (dat[y - 1][x] == 0)
+			dir = 2;
+	}
+	if (dir == 1)
+		if (y == -1)return;
+	if (dir == 2)
+		if (y == size)return;
+	if (dat[y][x] == 0) return;
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
+
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		cout << "check2" << endl;
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y + i][x] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y - i][x] = turn;
+		}
+		isStone = true;
+	}
+	if (dir == 1)
+		CheckVertical(y - 1, x, turn, cnt, dir);
+	if (dir == 2)
+		CheckVertical(y + 1, x, turn, cnt, dir);
+}
+void Logic::CheckRightDown(int y, int x, int turn, int cnt, int dir)
+{
+	//↘ = (dir=1), ↖ = (dir=2)
+	if (dir == 0)
+	{
+		if (x == 0 || y == 0)
+			dir = 1;
+		else if (dat[y - 1][x - 1] == 0)
+			dir = 1;
+		else if (x == size - 1 || y == size - 1)
+			dir = 2;
+		else if (dat[y + 1][x + 1] == 0)
+			dir = 2;
+	}
+	if (dir == 1)
+		if (y == size || x == size)return;
+	if (dir == 2)
+		if (y == -1 || x == -1)return;
+
+	if (dat[y][x] == 0) return;
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
+
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		cout << "check3" << endl;
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y - i][x - i] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y + i][x + i] = turn;
+		}
+		//isStone = true;
+	}
+	if (dir == 1)
+		CheckRightDown(y + 1, x + 1, turn, cnt, dir);
+	if (dir == 2)
+		CheckRightDown(y - 1, x - 1, turn, cnt, dir);
+}
+void Logic::CheckRightUp(int y, int x, int turn, int cnt, int dir)
+{
+	//↙ = (dir=1), ↗ = (dir=2)
+	if (dir == 0)
+	{
+		if (x == size - 1 || y == 0)
+			dir = 1;
+		else if (dat[y - 1][x + 1] == 0)
+			dir = 1;
+		else if (x == 0 || y == size - 1)
+			dir = 2;
+		else if (dat[y + 1][x - 1] == 0)
+			dir = 2;
+	}
+	if (dir == 1)
+		if (y == size || x == -1)return;
+	if (dir == 2)
+		if (y == -1 || x == size)return;
+
+	if (dat[y][x] == 0) return;
+	if (dat[y][x] != turn && dat[y][x] != 0)
+		cnt++;
+
+	if (dat[y][x] == turn && cnt != 0)
+	{
+		cout << "check4" << endl;
+		if (dir == 1)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y - i][x + i] = turn;
+		}
+		if (dir == 2)
+		{
+			for (int i = 0; i <= cnt; i++)
+				dat[y + i][x - i] = turn;
+		}
+		isStone = true;
+	}
+	if (dir == 1)
+		CheckRightUp(y + 1, x - 1, turn, cnt, dir);
+	if (dir == 2)
+		CheckRightUp(y - 1, x + 1, turn, cnt, dir);
+}
 void Render::DrawBoard()
 {
 	int type = 0;
@@ -135,7 +333,9 @@ void Render::DrawBoard()
 void Render::DrawHorz(int L, int M, int R, int S, int i, int type)
 {
 	cout << line[L];
-	for (int j = 0; j < size ; j++)
+	int j = 0;
+	if (type == OMOK) j = 1;
+	for ( j; j <= size ; j++)
 	{
 		if (type == OTHELLO)
 		{
@@ -147,11 +347,11 @@ void Render::DrawHorz(int L, int M, int R, int S, int i, int type)
 		
 		else if (type == OMOK)
 		{
-			if (j == size - 2)break;
-			if(dat[i][j]!=0)
+			if (j == size - 1)break;
+			if (dat[i][j] != 0)
 				cout << GetStone(i, j);
-			//else
-				cout << line[M];
+			else
+				cout << line[M];			
 		}
 		
 	} 
