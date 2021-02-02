@@ -3,17 +3,15 @@
 
 int main()
 {
-    char s[51] = { 0, };
-    int score = 10;
-    scanf("%s", s);
-    for (int i = 0; i < strlen(s); i++)
-    {
-        if (i != 0)
-        {
-            if (s[i] != s[i - 1])score += 10;
-            else score += 5;
-        }
+    int N = 0;
+    char K[70] = { 0, };
 
+    scanf("%d", &N);
+
+    for (int i = 0; i < N; i++)
+    {
+        scanf("%s", K);
+        if (K[strlen(K) - 1] % 2 != 0)printf("odd\n");
+        if (K[strlen(K) - 1] % 2 == 0)printf("even\n");
     }
-    printf("%d ", score);
 }
