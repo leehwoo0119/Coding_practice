@@ -4,26 +4,19 @@
 
 int main()
 {
-    char s = 0;
-    int cnt = 0;
-    // while (scanf("%[^\n]s", s) != EOF)
-    for (int i = 0; i < 8; i++)
-    {
+	char s1[10001] = { 0, };
+	char s2[10001] = { 0, };
+	long long int answer = 0;
+	scanf("%s %s", s1, s2);
 
-        for (int j = 0; j < 8; j++)
-        {
-            scanf("%c", &s);
-            if (s == 'F')
-            {
-                if (i % 2 == 0)
-                    if (j % 2 == 0)cnt++;
-                if (i % 2 == 1)
-                    if (j % 2 == 1)cnt++;
-            }
-
-        }
-        scanf("%c", &s);//¶ç¾î¾²±â
-    }
-
-    printf("%d", cnt);
+	for (int i = 0; i < strlen(s1); i++)
+	{
+		for (int j = 0; j < strlen(s2); j++)
+		{
+			answer += (s1[i] - '0') * (s2[j] - '0');
+			//printf("%c %c\n", s1[i], s2[j]);
+		}
+	}
+	printf("%lld ", answer);
 }
+
