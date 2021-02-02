@@ -1,28 +1,29 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<string.h>
 
 int main()
 {
-    char s[5001] = { 0, };
-    int i = 0;
-    int t = 0;
-    scanf("%s", s);
-
-    while (s[i] != '\0')
+    char s = 0;
+    int cnt = 0;
+    // while (scanf("%[^\n]s", s) != EOF)
+    for (int i = 0; i < 8; i++)
     {
-        if (s[i] == 'p' && s[i + 1] == 'i')
-            i += 2;
-        else if (s[i] == 'k' && s[i + 1] == 'a')
-            i += 2;
-        else if (s[i] == 'c' && s[i + 1] == 'h' && s[i + 2] == 'u')
-            i += 3;
-        else
-        {
-            t = 1;
-            break;
-        }
 
+        for (int j = 0; j < 8; j++)
+        {
+            scanf("%c", &s);
+            if (s == 'F')
+            {
+                if (i % 2 == 0)
+                    if (j % 2 == 0)cnt++;
+                if (i % 2 == 1)
+                    if (j % 2 == 1)cnt++;
+            }
+
+        }
+        scanf("%c", &s);//¶ç¾î¾²±â
     }
-    if (t == 1)printf("NO");
-    else printf("YES");
+
+    printf("%d", cnt);
 }
