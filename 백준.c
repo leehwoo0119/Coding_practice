@@ -3,15 +3,26 @@
 
 int main()
 {
-    int N = 0;
-    char K[70] = { 0, };
+    char s[5001] = { 0, };
+    int i = 0;
+    int t = 0;
+    scanf("%s", s);
 
-    scanf("%d", &N);
-
-    for (int i = 0; i < N; i++)
+    while (s[i] != '\0')
     {
-        scanf("%s", K);
-        if (K[strlen(K) - 1] % 2 != 0)printf("odd\n");
-        if (K[strlen(K) - 1] % 2 == 0)printf("even\n");
+        if (s[i] == 'p' && s[i + 1] == 'i')
+            i += 2;
+        else if (s[i] == 'k' && s[i + 1] == 'a')
+            i += 2;
+        else if (s[i] == 'c' && s[i + 1] == 'h' && s[i + 2] == 'u')
+            i += 3;
+        else
+        {
+            t = 1;
+            break;
+        }
+
     }
+    if (t == 1)printf("NO");
+    else printf("YES");
 }
