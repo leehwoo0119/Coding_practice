@@ -3,12 +3,13 @@
 
 int main() {
     char s[101] = { 0, };
-    int cnt = 0;
-    scanf("%s", s);
-    for (int i = 0; i < strlen(s); i++)
+
+
+    while (scanf("%[^\n]s", s) != EOF)
     {
-        if (s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
-            cnt++;
+        getchar();
+        if (strlen(s) == 0)break;
+        printf("%s\n", s);
     }
-    printf("%d", cnt);
+
 }
