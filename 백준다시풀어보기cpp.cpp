@@ -2,14 +2,15 @@
 #include<string.h>
 
 int main() {
-    char s[101] = { 0, };
+    char s;
 
 
-    while (scanf("%[^\n]s", s) != EOF)
+    while (scanf("%c", &s) != EOF)
     {
-        getchar();
-        if (strlen(s) == 0)break;
-        printf("%s\n", s);
+        // getchar();
+
+        // if(strlen(s)==1)break;
+        printf("%c", s);
     }
 
 }
