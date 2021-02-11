@@ -4,16 +4,15 @@ bool Logic2D::setData(int _r, int _c)
 {
 	if (dat[_r][_c] > 0)return false;
 
-	/*if (gamemode == OMOK)analyzeOmok(_r, _c);
-	else {
-		analyzeOthello(_r, _c);
-	}*/
-	cout << turn;
 	dat[_r][_c] = turn;
 	turn = 3 - turn;
 
-	/*if (gamemode == OMOK)return(length == 4);*/
-	/*else*/
+	for (int dir_ = 0; dir_ < 8; dir_++)
+	{
+		if (gamemode == 1)analyzeOmok(_r, _c, dir_);
+		//else analyzeOthello(_r, _c, dir_);
+	}
+
 		return false;
 }
 

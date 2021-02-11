@@ -30,6 +30,12 @@
     <ClInclude Include="Logic2D.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="LogicOmok.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicOthello.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logic.cpp">
@@ -48,6 +54,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Logic2D.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicOmok.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicOthello.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

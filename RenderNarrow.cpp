@@ -8,7 +8,7 @@ void RenderNarrow::printBoard()
 	{
 		if (i == size - 2)
 			break;
-		if (i == size - 1)break;
+
 		DrawHorz(5, 6, 7, 0, i + 1);
 	}
 	DrawHorz(8, 9, 10, 0, size - 1);
@@ -17,9 +17,9 @@ void RenderNarrow::DrawHorz(int L, int M, int R, int S, int i)
 {
 	cout << line[L];
 	
-	for (int j = 0; j <= size; j++)
+	for (int j = 1; j <= size; j++)
 	{
-			if (j == size - 1)break;
+			if (j == size - 2)break;
 			if (dat[i][j] != 0)
 				cout << GetStone(i, j);
 			else
@@ -35,7 +35,7 @@ void RenderNarrow::DrawHorz(int L, int M, int R, int S, int i)
 }
 string Render::GetStone(int y, int x)
 {
-	string res = "  ";
+	string res = "";
 	if (dat[y][x] != 0)res = stone[dat[y][x] - 1];
 	return res;
 }

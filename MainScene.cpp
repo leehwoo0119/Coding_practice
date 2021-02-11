@@ -1,5 +1,6 @@
 #include "Logic.h"
 #include "Logic2D.h"
+#include "LogicOmok.h"
 #include "Render.h"
 #include "RenderNarrow.h"
 #include "RenderWide.h"
@@ -10,7 +11,7 @@ int main()
 	cout << "Input Gamemode: ";
 
 
-	Logic* l = new Logic2D();
+	Logic* l = new LogicOmok();
 	Render* r = 0;
 
 	if (l->GetMode() == 1)r = new RenderNarrow();

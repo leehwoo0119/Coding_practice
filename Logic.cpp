@@ -3,6 +3,7 @@
 Logic::Logic()
 {	
 	cin >> gamemode;
+	// gamemode 1 ¿À¸ñ 2 ¿Àµ¨·Î
 	size = (gamemode == 1) ? 16 : 8;
 	if (dat == NULL)
 	{
