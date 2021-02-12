@@ -2,6 +2,6 @@
 
 void LogicOthello::analyzeOthello(int y_, int x_, int dir_)
 {
-	cout << "doof";
+	//cout << "doof";
 }
 
