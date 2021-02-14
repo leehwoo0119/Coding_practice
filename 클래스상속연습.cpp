@@ -2,50 +2,42 @@
 #pragma warning(disable : 4996)
 using namespace std;
 
-
-class CarInfo
+class Info
 {
-private:
-	char color[256]="red";
-	int num = 11;
-
+protected:
+	char name[256];
+	int score;
 public:
-	void setcolor(char* value) { strcpy(color, value); }
-	void setnum(int value) { value = num; }
-
-	char* getcolor() { return color; };
-	int getnum() { return num; };
-
-	void print() {};
-
+	char* getName() { return name; }
+	int getScore() { return score; }
 };
-
-class C_Car :public CarInfo
+class c_Class : public Info
 {
-private:
-	int ID = 1223;
-	char name[256]="eea";
-
 public:
-	void setname(char* value) { strcpy(name, value); }
-	void setid(int value) { value = ID; }
-
-	char* getname() { return name; };
-	int getid() { return ID; };
-
-	void print() {
-		cout << getname() << getid() << getcolor() << getnum();
-	};
+	void setName() { strcpy(getName(), "Ã¶¼ö"); };
+	void setScore(int value) { score = value; };
+};
+class y_Class : public Info
+{
+public:
+	void setName() { strcpy(getName(), "¿µÈñ"); };
+	void setScore(int value) { score = value; };
 };
 int main()
 {
-	C_Car* p_c_car = nullptr;
+	c_Class* p_c = new c_Class;
+	y_Class* p_y = new y_Class;
+	p_c->setName();
+	p_y->setName();
+	int score_c = 0; int score_y = 0;
+	cin >> score_c;
+	p_c->setScore(score_c);
+	cin >> score_y;
+	p_y->setScore(score_y);
 
-	if (p_c_car == nullptr)
-		p_c_car = new C_Car;
-
-	p_c_car->print();
-
-	delete p_c_car;
+	cout << p_c->getName()<<endl;
+	cout << p_c->getScore() << endl;
+	cout << p_y->getName() << endl;
+	cout << p_y->getScore() << endl;
 	return 0;
 }
