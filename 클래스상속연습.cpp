@@ -1,43 +1,38 @@
 #include <iostream>
+//#include <combaseapi.h>
 #pragma warning(disable : 4996)
 using namespace std;
 
-class Info
+
+class _Student
 {
 protected:
-	char name[256];
-	int score;
+	int ID;
 public:
-	char* getName() { return name; }
-	int getScore() { return score; }
+	virtual void SetID(int value) = 0;
+	virtual int GetID() = 0;
 };
-class c_Class : public Info
+
+class Sujin:public _Student
 {
 public:
-	void setName() { strcpy(getName(), "Ã¶¼ö"); };
-	void setScore(int value) { score = value; };
-};
-class y_Class : public Info
-{
-public:
-	void setName() { strcpy(getName(), "¿µÈñ"); };
-	void setScore(int value) { score = value; };
+	void Print()
+	{
+		cout << ID;
+	}
+
+	virtual void SetID(int value) { ID = value; };
+	virtual int GetID() { return ID; };
 };
 int main()
 {
-	c_Class* p_c = new c_Class;
-	y_Class* p_y = new y_Class;
-	p_c->setName();
-	p_y->setName();
-	int score_c = 0; int score_y = 0;
-	cin >> score_c;
-	p_c->setScore(score_c);
-	cin >> score_y;
-	p_y->setScore(score_y);
+	
+	Sujin* ps = new Sujin;
 
-	cout << p_c->getName()<<endl;
-	cout << p_c->getScore() << endl;
-	cout << p_y->getName() << endl;
-	cout << p_y->getScore() << endl;
+	int ID = 0;
+	cin >> ID;
+	ps->SetID(ID);
+	ps->Print();
+	delete ps;
 	return 0;
 }
