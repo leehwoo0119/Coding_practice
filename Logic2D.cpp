@@ -15,7 +15,7 @@ bool Logic2D::setData(int _r, int _c)
 	}
 
 	omokCnt = 0;
-
+	bingoCnt = 0;
 	if (!isStone)
 	{
 		dat[_r][_c] = 0;

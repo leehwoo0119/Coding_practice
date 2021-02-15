@@ -8,7 +8,6 @@ void LogicOthello::analyzeGame(int y, int x, int _y, int _x)
 	if (_y > y)yi = 1;
 	else if (_y < y)yi = -1;
 
-	cout << y << " " << x << "," << _y << " " << _x << "," << othelloCnt << endl;
 	if (dat[_y][_x] == 3 - turn && othelloCnt != 0)
 		for (int i = 0; i <= othelloCnt; i++)
 			Cal(y + (yi)*i, x + (xi)*i);

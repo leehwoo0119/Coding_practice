@@ -10,6 +10,7 @@ protected:
 	bool isStone = false;
 	int othelloCnt = 0;
 	int omokCnt = 0;
+	int bingoCnt = 0;
 	int move[8][2] = { {0,1},{0,-1},{-1,0},{1,0},{1,1},{-1,-1},{1,-1},{-1,1} };
 public:	
 	bool inputData(string);

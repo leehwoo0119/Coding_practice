@@ -2,8 +2,8 @@
 
 void Logic::MakeMemory()
 {	
-	// gamemode 1 ¿À¸ñ 2 ¿Àµ¨·Î
-	size = (gamemode == 1) ? 16 : 8;
+	// gamemode 1 ¿À¸ñ 2 ¿Àµ¨·Î 3 ºù°í
+	size = (gamemode == 1) ? 16 : (gamemode == 2) ? 8 : 5;
 	if (dat == NULL)
 	{
 		dat = (int**)new int* [size];

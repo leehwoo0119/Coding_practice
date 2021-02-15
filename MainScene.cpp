@@ -2,13 +2,14 @@
 #include "Logic2D.h"
 #include "LogicOmok.h"
 #include "LogicOthello.h"
+#include "LogicBingo.h"
 #include "Render.h"
 #include "RenderNarrow.h"
 #include "RenderWide.h"
 int main()
 {	
 	cout << "게임 고르기" << endl;
-	cout << "(1)오목 (2)오델로" << endl;
+	cout << "(1)오목 (2)오델로 (3)빙고" << endl;
 	cout << "Input Gamemode: ";
 
 
@@ -22,11 +23,16 @@ int main()
 		l = new LogicOmok();
 		r = new RenderNarrow();
 	}
-	else 
+	else if(gamemode == 2)
 	{
 		l = new LogicOthello();
 		r = new RenderWide();
 	} 
+	else
+	{
+		l = new LogicBingo();
+		r = new RenderWide();
+	}
 	l->SetMode(gamemode);
 	l->MakeMemory();
 	r->GetData(l->GetDat(),l->GetSize(), l->GetMode() == 2);
@@ -43,5 +49,7 @@ int main()
 		bGameover = l->inputData(input);
 	}
 	
+	delete l;
+	delete r;
 	return 0;
 }

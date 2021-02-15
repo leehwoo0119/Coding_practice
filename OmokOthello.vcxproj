@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Logic2D.h" />
+    <ClInclude Include="LogicBingo.h" />
     <ClInclude Include="LogicOmok.h" />
     <ClInclude Include="LogicOthello.h" />
     <ClInclude Include="Render.h" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Logic2D.cpp" />
+    <ClCompile Include="LogicBingo.cpp" />
     <ClCompile Include="LogicOmok.cpp" />
     <ClCompile Include="LogicOthello.cpp" />
     <ClCompile Include="MainScene.cpp" />
