@@ -3,6 +3,6 @@
 class LogicOmok : public Logic2D
 {
 private:
-	virtual void analyzeGame(int, int, int);		
+	virtual void analyzeGame(int, int, int, int);
 };
 

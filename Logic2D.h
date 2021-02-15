@@ -4,11 +4,13 @@ class Logic2D : public Logic
 {
 private:
 	bool setData(int, int);
+	void gameLogic(int, int, int);
 protected:
-	virtual void analyzeGame(int, int, int) = 0;
+	virtual void analyzeGame(int, int, int, int) = 0;
 	bool isStone = false;
 	int othelloCnt = 0;
 	int omokCnt = 0;
+	int move[8][2] = { {0,1},{0,-1},{-1,0},{1,0},{1,1},{-1,-1},{1,-1},{-1,1} };
 public:	
 	bool inputData(string);
 };

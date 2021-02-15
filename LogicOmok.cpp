@@ -1,43 +1,10 @@
 #include "LogicOmok.h"
 
-void LogicOmok::analyzeGame(int y, int x, int dir)
+void LogicOmok::analyzeGame(int y, int x, int _y, int _x)
 {
-	//cout << omokCnt << endl;
+	//cout << y<<" "<< x << "," << _y << " " << _x << "," << omokCnt << endl;
 	isStone = true;
-	if (dat[y][x] == 0) return;
-	switch (dir)
-	{
-	case RIGHT:
-		if (dat[y][x] == dat[y][x + 1])omokCnt++;
-		analyzeGame(y, x + 1, dir);
-		break;
-	case LEFT:
-		if (dat[y][x] == dat[y][x - 1])omokCnt++;
-		analyzeGame(y, x - 1, dir);
-		break;
-	case UP:
-		if (dat[y][x] == dat[y - 1][x])omokCnt++;
-		analyzeGame(y - 1, x, dir);
-		break;
-	case DOWN:
-		if (dat[y][x] == dat[y + 1][x])omokCnt++;
-		analyzeGame(y + 1, x, dir);
-		break;
-	case DR:
-		if (dat[y][x] == dat[y + 1][x + 1]) omokCnt++;
-		analyzeGame(y + 1, x + 1, dir);
-		break;
-	case UL:
-		if (dat[y][x] == dat[y - 1][x - 1]) omokCnt++;
-		analyzeGame(y - 1, x - 1, dir);
-		break;
-	case DL:
-		if (dat[y][x] == dat[y + 1][x - 1])omokCnt++;
-		analyzeGame(y + 1, x - 1, dir);
-		break;
-	case UR:
-		if (dat[y][x] == dat[y - 1][x + 1])omokCnt++;
-		analyzeGame(y - 1, x + 1, dir);
-		break;
-	}
+
+	if (dat[y][x] == dat[_y][_x])omokCnt++;
+	if (omokCnt == 4)cout << "승리하는 메소드로";
 }
