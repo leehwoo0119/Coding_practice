@@ -45,7 +45,8 @@ int main()
 		//system("cls");
 		r->printBoard();
 		if (bGameover)break;
-		cout << "Input Position: ";
+		if(gamemode != 3)cout << "Input Position: ";		
+		else cout << "Input Number: ";
 		cin >> input;
 		bGameover = l->inputData(input);
 	}

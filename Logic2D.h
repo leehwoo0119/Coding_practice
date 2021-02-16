@@ -5,6 +5,7 @@ class Logic2D : public Logic
 private:
 	bool setData(int, int);
 	void gameLogic(int, int, int);
+	void LogicDir(int, int);
 protected:
 	virtual void analyzeGame(int, int, int, int) = 0;
 	bool isStone = false;

@@ -6,6 +6,7 @@ class Logic {
 protected:
 	int** dat = 0;
 	int size = 0;
+	int Size = 0;
 	int gamemode = 0;
 	int turn = 1;
 public:
@@ -19,4 +20,7 @@ public:
 
 	void SetMode(int value) { gamemode = value; };
 	virtual bool inputData(string) = 0;
+private:
+	virtual void GameTypeMemoryMake() = 0;
+	
 };
