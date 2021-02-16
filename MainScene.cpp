@@ -5,9 +5,10 @@
 #include "LogicBingo.h"
 #include "Render.h"
 #include "RenderNarrow.h"
-#include "RenderWide.h"
+#include "RenderBingo.h"
 int main()
 {	
+	srand((unsigned)time(NULL));
 	cout << "게임 고르기" << endl;
 	cout << "(1)오목 (2)오델로 (3)빙고" << endl;
 	cout << "Input Gamemode: ";
@@ -17,21 +18,21 @@ int main()
 	Render* r = 0;
 	int gamemode = 0;
 	cin >> gamemode;
-	
+
 	if (gamemode == 1)
 	{
 		l = new LogicOmok();
 		r = new RenderNarrow();
 	}
-	else if(gamemode == 2)
+	else if (gamemode == 2)
 	{
 		l = new LogicOthello();
-		r = new RenderWide();
-	} 
+		r = new RenderBingo();
+	}
 	else
 	{
 		l = new LogicBingo();
-		r = new RenderWide();
+		r = new RenderBingo();
 	}
 	l->SetMode(gamemode);
 	l->MakeMemory();

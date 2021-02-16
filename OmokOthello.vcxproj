@@ -145,6 +145,7 @@
     <ClInclude Include="LogicOmok.h" />
     <ClInclude Include="LogicOthello.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="RenderBingo.h" />
     <ClInclude Include="RenderNarrow.h" />
     <ClInclude Include="RenderWide.h" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClCompile Include="LogicOthello.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="RenderBingo.cpp" />
     <ClCompile Include="RenderNarrow.cpp" />
     <ClCompile Include="RenderWide.cpp" />
   </ItemGroup>

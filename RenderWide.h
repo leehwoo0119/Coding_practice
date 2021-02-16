@@ -14,7 +14,8 @@ private:
 	void printUITop();
 	void printBoard();
 	void DrawHorz(int, int, int, int, int);
-	void DrawBingo(int, int);
+	virtual void DrawBingo() = 0;
+	virtual void DrawBingoTop() = 0;
 	virtual string GetStone(int, int);
 };
 
