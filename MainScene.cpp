@@ -42,7 +42,7 @@ int main()
 	bool bGameover = false;
 	while (1)
 	{		
-		//system("cls");
+		system("cls");
 		r->printBoard();
 		if (bGameover)break;
 		if(gamemode != 3)cout << "Input Position: ";		
