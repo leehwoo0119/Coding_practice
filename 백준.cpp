@@ -1,47 +1,48 @@
 #include <iostream>
-#include <vector>
+#include <list>
 
 using namespace std;
-
 int main()
 {
 	cin.tie(0);
 	ios::sync_with_stdio(0);
 	int N = 0;
-	int s = 0;
-	vector<pair<int, int>> v;
+	
+	string str;
+
+	cin >> str;
 	cin >> N;
+	list<char> l(str.begin(), str.end());
+	auto iter = l.end();
 	for (int i = 0; i < N; i++)
 	{
-		cin >> s;
-		v.push_back({ i + 1, s });
+		char s;
 		
+		cin >> s;		
+			switch (s)
+			{
+			case 'L':
+				if (iter != l.begin()) iter--;
+				break;
+			case 'D':
+				if (iter != l.end()) iter++;
+				break;
+			case 'B':
+				if (iter != l.begin()) iter = l.erase(--iter);
+				break;
+			default:
+				char x;
+				cin >> x;
+				iter = l.insert(iter, x);
+				iter++;
+				break;			
+			}
+	
 	}
-	int move = 0;
-	while (1)
+	for (auto& x : l)
 	{
-		
-		cout << v.front().first << " ";
-		move = v.front().second;
-		v.erase(v.begin());
-		if (v.empty())break;
-		if (move > 0)
-		{
-			for (int i = 0; i < move - 1; i++)
-			{
-				v.push_back(v.front());
-				v.erase(v.begin());
-			}
-		}
-		else
-		{
-			for (int i = 0; i < -move; i++)
-			{
-				v.insert(v.begin(),v.back());
-				v.pop_back();
-			}
-		}
+		cout << x;
 	}
-
+	
 	return 0;
 }
